@@ -2,8 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import org.pushingpixels.substance.api.SubstanceSkin;
-
 
 public class Gui{
     private static String result;
@@ -12,15 +10,12 @@ public class Gui{
 
     public Gui() {
         new DesignSubstance();
-        //читаем данные с файла (english)
+        //read from ForeignWords
         FileWorker.read();
-        //читаем данные с файла (русский)
+        //read from NativWords
         FileWorker.readP();
-        //данные с хэшкарты
+        //read data from HashMap
         FileWorker.log();
-        //стандартный вид системы
-
-
 
         JFrame frame = new JFrame("Program For Learning");
         JPanel panel = new JPanel();
@@ -31,11 +26,11 @@ public class Gui{
         JButton button1 = new JButton("Before");
         JButton button2 = new JButton("Translate");
         JButton button3 = new JButton("Delete");
-
         JMenuBar bar = new JMenuBar();
         JMenu menu = new JMenu("Settings");
-        JMenuItem item = new JMenuItem("Add Words");
 
+        JMenuItem item = new JMenuItem("Add Words");
+        //Menu item (Add Words)
         item.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -44,9 +39,8 @@ public class Gui{
             }
         });
 
-
         JMenuItem item1 = new JMenuItem("All Words");
-
+        //menu item (All Words)
         item1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 AllWords allWords = new AllWords();
@@ -55,7 +49,7 @@ public class Gui{
         });
 
         JMenuItem item2 = new JMenuItem("Exit");
-
+        //menu item (Exit)
         item2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
@@ -63,7 +57,7 @@ public class Gui{
         });
 
         JMenuItem item3 = new JMenuItem("Delete");
-
+        //menu item (Delete)
         item3.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 delete();
@@ -124,46 +118,38 @@ public class Gui{
         frame.pack();
         frame.setVisible(true);
     }
-    //слушатель "Next"
     public class NextButton implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            //если выведенное слово равно последнему элементу в массиве
             if (!label.getText().equals(FileWorker.list.get(FileWorker.list.size() - 1))) {
-                //следующий элемент
+                //next element
                 result = FileWorker.list.get(++count);
-                //выводим результат
+                //output result
                 label.setText(result);
             }
         }
     }
-    //Слушатель "Before"
     public class BeforeButton implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            //если выведенное слово равно первому элементу в массиве
             if (!label.getText().equals(FileWorker.list.get(FileWorker.list.size() - FileWorker.list.size()))) {
-                //предыдущий элемент
+                //previous element
                 result = FileWorker.list.get(--count);
-                //выводим результат
+                //output result
                 label.setText(result);
             }
         }
     }
-    //Слушатель "Translation"
     public class TransButton implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            //Получаем русское слово
             String rus = FileWorker.map.get(result);
-            //если слово анлийское
             if (label.getText().equals(FileWorker.mapP.get(rus))) {
-                //Выводим русский перевод
+                //output a nativ word
                 label.setText(FileWorker.map.get(result));
             }else {
-                //выводим английское слово
+                //output a foreign word
                 label.setText(FileWorker.mapP.get(rus));
             }
         }
     }
-
     public void delete() {
         String result = label.getText();
         for (int i = 0; i < FileWorker.list.size(); i++) {

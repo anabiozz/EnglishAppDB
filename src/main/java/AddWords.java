@@ -9,6 +9,7 @@ public class AddWords implements Runnable{
     public static JTextField field;
     public static JTextField field2;
 
+    @Override
     public void run() {
         JFrame frame = new JFrame("Program For Learning");
         field = new JTextField(30);
@@ -17,6 +18,8 @@ public class AddWords implements Runnable{
         JLabel label2 = new JLabel("Native Word");
         JButton button = new JButton("Add this words");
         JPanel panel = new JPanel();
+
+
 
         frame.setBounds(400, 150, 400, 230);
         frame.setPreferredSize(new Dimension(400, 230));
@@ -49,6 +52,7 @@ public class AddWords implements Runnable{
         frame.setResizable(false);
         //frame.pack();
         button.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 addArray = field.getText();
                 addArray2 = field2.getText();
@@ -63,8 +67,9 @@ public class AddWords implements Runnable{
                 }else{
                     FileWorker.list.add(addArray);
                     FileWorker.listP.add(addArray2);
-                    FileWorker.writer();
                     FileWorker.log();
+                    FileWorker.writer();
+
                 }
             }
         });
