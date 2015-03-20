@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="model.EnglishApp" table="EnglishApp">
+        <id name="ID" type="int">
+            <column name="ID" />
+            <generator class="increment" />
+        </id>
+        <property name="English_Word" type="java.lang.String">
+            <column name="English_Word" />
+        </property>
+        <property name="Russian_Word" type="java.lang.String">
+            <column name="Russian_Word" />
+        </property>
+    </class>
+</hibernate-mapping>

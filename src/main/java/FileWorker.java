@@ -1,62 +1,50 @@
-import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import model.EnglishApp1;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import util.HibernateUtil;
+
+import java.util.*;
 
 public class FileWorker {
     public static ArrayList<String> list = new ArrayList<>();
     public static ArrayList<String> listP = new ArrayList<>();
     protected static Map<String, String> map;
     protected static Map<String, String> mapP;
-    protected static String addArray;
-    protected static String addArray2;
+    protected static List<EnglishApp1> book;
+    protected static List<EnglishApp1> book2;
+
+    public void ip() {
+
+    }
 
     //read data from the ForeignWords file
     public static void read() {
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("ForeignWords.txt"), "UTF-8"));
-            try {
-                while ((addArray = reader.readLine()) !=null) {
-                    list.add(addArray);
-                }
-            } finally {
-                reader.close();
-            }
-        } catch(IOException e) {
-            throw new RuntimeException(e);
+        SessionFactory sessionFactory = HibernateUtil.getSessionJavaConfigFactory();
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        book =  session.createQuery("SELECT English_Word from model.EnglishApp1").list();
+        Iterator it = book.iterator();
+        while (it.hasNext()) {
+            String result = String.valueOf(it.next());
+            list.add(result);
         }
+        //Commit transaction
+        session.getTransaction().commit();
+
     }
-    //read data from the NativWors file
+    //read data from the NativWords file
     public static void readP() {
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("NativWords.txt"), "UTF-8"));
-            try {
-                while ((addArray2 = reader.readLine()) != null) {
-                    listP.add(addArray2);
-                }
-            } finally {
-                reader.close();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        SessionFactory sessionFactory = HibernateUtil.getSessionJavaConfigFactory();
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        book2 =  session.createQuery("SELECT Russian_Word from model.EnglishApp1").list();
+        Iterator it = book2.iterator();
+        while (it.hasNext()) {
+            String result2 = String.valueOf(it.next());
+            listP.add(result2);
         }
-    }
-    //метод записи
-    public static void writer() {
-        try {
-            FileWriter writer = new FileWriter(new File("ForeignWords.txt"));
-            FileWriter writer2 = new FileWriter(new File("NativWords.txt"));
-            //записываем в файл данные из массива list
-            for (int i = 0; i < list.size(); ++i) {
-                writer.write(list.get(i) + "\n");
-                writer.flush();
-            }
-            //записываем в файл данные из массива listP
-            for (int j = 0; j < listP.size(); ++j) {
-                writer2.write(listP.get(j) + "\n");
-                writer2.flush();
-            }
-        } catch (Exception e) {e.printStackTrace();}
+        //Commit transaction
+        session.getTransaction().commit();
     }
 
     //write data from ArrayList to HashMap
@@ -76,4 +64,22 @@ public class FileWorker {
             mapP.put(e, r);
         }
     }
+
+    //write data to files
+    public static void writer() {
+        EnglishApp1 emp = new EnglishApp1();
+        emp.setEnglish_Word(AddWords.addArray);
+        emp.setRussian_Word(AddWords.addArray2);
+        //Get Session
+        SessionFactory sessionFactory = HibernateUtil.getSessionJavaConfigFactory();
+        Session session = sessionFactory.getCurrentSession();
+        //start transaction
+        session.beginTransaction();
+        //Save the Model object
+        session.save(emp);
+        //Commit transaction
+        session.getTransaction().commit();
+        System.out.println("Line created: "+emp.getId());
+    }
+
 }
